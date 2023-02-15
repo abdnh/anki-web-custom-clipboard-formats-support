@@ -8,6 +8,7 @@ from anki.hooks import wrap
 from aqt import mw
 from aqt.editor import EditorWebView, pics
 from aqt.qt import *
+from .server import CorsServer
 
 
 def process_mime(
@@ -48,3 +49,7 @@ def process_mime(
 
 # TODO: use the editor_will_process_mime hook for newer versions
 EditorWebView._processMime = wrap(EditorWebView._processMime, process_mime, "around")
+config = mw.addonManager.getConfig(__name__)
+if config["run_server"]:
+    server = CorsServer(config)
+    server.start()
